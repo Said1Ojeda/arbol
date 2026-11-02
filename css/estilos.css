@@ -211,6 +211,204 @@ button, input {
   padding: 9px 12px;
 }
 
+/* pestanas de explorar y retos */
+.pestanas {
+  display: flex;
+  gap: 4px;
+  margin-right: auto;
+  margin-left: 18px;
+}
+
+.pestanas button {
+  padding: 8px 16px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: none;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--tinta-suave);
+  cursor: pointer;
+}
+
+.pestanas button[aria-selected="true"] {
+  color: var(--tinta);
+  border-bottom-color: var(--brote);
+}
+
+/* en retos no hay reproductor ni selector de modo, el juego decide */
+body[data-vista="retos"] .reproductor,
+body[data-vista="retos"] .selector-modo {
+  display: none;
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+/* marcador del juego */
+.marcador-retos {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr 1fr;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 2px solid var(--linea);
+  border-radius: 22px;
+  background: var(--hoja-papel);
+}
+
+.vidas {
+  display: flex;
+  gap: 2px;
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.vida {
+  color: var(--ciruela);
+  transition: transform .3s ease, opacity .3s ease;
+}
+
+.vida.perdida {
+  opacity: .2;
+  transform: scale(.7);
+}
+
+.cifra {
+  text-align: center;
+}
+
+.cifra span {
+  display: block;
+  color: var(--tinta-suave);
+  font-size: .8rem;
+}
+
+.cifra b {
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.reto-tipo {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 3px 12px;
+  border-radius: 99px;
+  background: var(--brote);
+  color: #fff;
+  font-size: .85rem;
+  font-weight: 600;
+}
+
+.reto-pregunta {
+  font-size: 1.35rem !important;
+  line-height: 1.25;
+}
+
+.reto-ayuda {
+  margin-top: 6px;
+  color: var(--tinta-suave);
+  font-size: .95rem;
+}
+
+.reto-opciones {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.reto-opciones:empty,
+.reto-lista:empty {
+  display: none;
+}
+
+.reto-lista:empty::before {
+  content: none;
+}
+
+.opcion-reto {
+  padding: 12px 14px;
+  border: 2px solid var(--linea);
+  border-bottom-width: 4px;
+  border-radius: 16px;
+  background: var(--semilla);
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.opcion-reto:hover:not(:disabled) {
+  border-color: var(--sol);
+}
+
+.opcion-reto.bien {
+  border-color: var(--brote-oscuro);
+  background: var(--brote);
+  color: #fff;
+}
+
+.opcion-reto.mal {
+  border-color: var(--ciruela);
+  background: color-mix(in srgb, var(--ciruela) 18%, var(--semilla));
+}
+
+.reto-lista li.faltaba {
+  background: none;
+  border: 2px dashed var(--cielo);
+  color: var(--tinta);
+}
+
+.boton.grande {
+  width: 100%;
+  margin-top: 16px;
+  padding: 14px;
+  font-size: 1.05rem;
+}
+
+.fin-juego {
+  text-align: center;
+}
+
+.fin-icono {
+  font-size: 3rem;
+}
+
+.fin-juego h2 {
+  font-size: 1.4rem !important;
+}
+
+/* los huecos que se pueden tocar en el reto de donde cae */
+.hueco.tocable {
+  cursor: pointer;
+}
+
+.hueco.tocable circle {
+  animation: respira 1.6s ease-in-out infinite;
+}
+
+.hueco.tocable:hover circle,
+.hueco.tocable:focus circle {
+  fill: color-mix(in srgb, var(--brote) 40%, transparent);
+  stroke-width: 3.5;
+}
+
+.hueco.tocable:focus {
+  outline: none;
+}
+
+@keyframes respira {
+  50% { stroke-dashoffset: 10; }
+}
+
+.confeti {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+  pointer-events: none;
+}
+
 /* selector de tipo de arbol, una pastilla con dos lados */
 .selector-modo {
   display: inline-flex;
@@ -452,6 +650,11 @@ button, input {
   stroke: var(--brote);
   stroke-width: 2.5;
   stroke-dasharray: 5 5;
+}
+
+/* la pastilla solo se ve, nunca debe tapar los toques al nodo de abajo */
+.flotante {
+  pointer-events: none;
 }
 
 .flotante rect {
@@ -817,6 +1020,14 @@ button, input {
   .escena {
     height: 64vh;
     min-height: 380px;
+  }
+}
+
+@media (max-width: 720px) {
+  .pestanas {
+    order: 3;
+    width: 100%;
+    margin-left: 0;
   }
 }
 

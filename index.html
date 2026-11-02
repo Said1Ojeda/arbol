@@ -25,6 +25,10 @@
       <p class="lema">Árboles binarios que se arman frente a ti</p>
     </div>
   </div>
+  <nav class="pestanas" role="tablist" aria-label="Qué hacer">
+    <button type="button" role="tab" aria-selected="true" data-vista="explorar">Explorar</button>
+    <button type="button" role="tab" aria-selected="false" data-vista="retos">Retos 🎮</button>
+  </nav>
   <div class="herramientas">
   <button class="redondo" type="button" id="sonido" aria-pressed="true" aria-label="Sonido" title="Sonido">🔊</button>
   <div class="selector-modo" role="radiogroup" aria-label="Tipo de árbol">
@@ -68,7 +72,30 @@
     </div>
   </section>
 
-  <aside class="panel">
+  <aside class="panel panel-retos" id="panel-retos" hidden>
+    <div class="marcador-retos">
+      <div class="vidas" id="vidas"></div>
+      <div class="cifra"><span>Puntos</span><b id="puntos">0</b></div>
+      <div class="cifra"><span>Racha</span><b id="racha">0</b></div>
+      <div class="cifra"><span>Récord</span><b id="record">0</b></div>
+    </div>
+    <section class="tarjeta reto" id="tarjeta-reto" aria-live="polite">
+      <p class="reto-tipo" id="reto-tipo"></p>
+      <h2 class="reto-pregunta" id="reto-pregunta"></h2>
+      <p class="reto-ayuda" id="reto-ayuda"></p>
+      <div class="reto-opciones" id="reto-opciones"></div>
+      <ol class="lista-recorrido reto-lista" id="reto-lista" aria-label="Lo que llevas"></ol>
+      <button class="boton brote-btn grande" type="button" id="reto-sig" hidden>Siguiente reto</button>
+    </section>
+    <section class="tarjeta fin-juego" id="fin-juego" hidden>
+      <p class="fin-icono" aria-hidden="true">🌳</p>
+      <h2>Se acabaron las vidas</h2>
+      <p id="fin-texto"></p>
+      <button class="boton brote-btn grande" type="button" id="otra">Jugar otra vez</button>
+    </section>
+  </aside>
+
+  <aside class="panel panel-explorar">
     <form class="agregar" id="form" autocomplete="off">
       <label for="valor">Número</label>
       <div class="fila-entrada">
@@ -120,6 +147,7 @@
 <script src="js/arbol.js"></script>
 <script src="js/dibujo.js"></script>
 <script src="js/sonido.js"></script>
+<script src="js/retos.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

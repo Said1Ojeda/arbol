@@ -239,7 +239,7 @@
     }));
     // tocar un nodo abre su ficha y pone su numero en la caja
     let fichaDe = null;
-    escena.alTocar = id => {
+    const tocarNodo = (id) => {
         const f = pasos[actual]?.foto;
         const n = f?.nodos[id];
         if (!f || !n)
@@ -301,6 +301,7 @@
         if (p)
             escena.pintar(p, { fb: arbol.modo === 'avl' });
     }
+    escena.alTocar = tocarNodo;
     $('cerrar-ficha').addEventListener('click', cerrarFicha);
     $('ficha-buscar').addEventListener('click', () => { cerrarFicha(); hacer('buscar'); });
     $('ficha-eliminar').addEventListener('click', () => { cerrarFicha(); hacer('eliminar'); });
@@ -372,9 +373,38 @@
                 : 'Árbol de búsqueda normal. No se balancea solo, depende del orden en que entren los números.')], false);
     }
     document.querySelectorAll('[data-modo]').forEach(b => b.addEventListener('click', () => ponerModo(b.dataset.modo)));
+    // pestanas, explorar y retos comparten el escenario
+    const retos = new Retos(escena, {
+        mensaje: (texto, tono) => {
+            const m = $('mensaje');
+            m.textContent = texto;
+            m.className = 'mensaje ' + tono;
+        }
+    });
+    let vista = 'explorar';
+    function ponerVista(v) {
+        vista = v;
+        document.body.dataset.vista = v;
+        document.querySelectorAll('[data-vista]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.vista === v)));
+        $('panel-retos').hidden = v !== 'retos';
+        document.querySelector('.panel-explorar').hidden = v !== 'explorar';
+        cerrarFicha();
+        tocar(false);
+        if (v === 'retos') {
+            $('vacio').hidden = true;
+            $('contador').textContent = '';
+            retos.activar();
+        }
+        else {
+            escena.alTocar = tocarNodo;
+            escena.alHueco = null;
+            mostrar();
+        }
+    }
+    document.querySelectorAll('[data-vista]').forEach(b => b.addEventListener('click', () => ponerVista(b.dataset.vista)));
     // atajos, espacio pausa y las flechas mueven los pasos, si no estas escribiendo
     document.addEventListener('keydown', ev => {
-        if (ev.target instanceof HTMLInputElement)
+        if (ev.target instanceof HTMLInputElement || vista === 'retos')
             return;
         if (ev.key === ' ') {
             ev.preventDefault();

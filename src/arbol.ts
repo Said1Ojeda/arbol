@@ -144,6 +144,8 @@ class Arbol {
             { [n.id]: 'desbalance', [hijo.id]: 'camino' });
 
         const caso = izqPesa ? (doble ? 'izquierda-derecha' : 'izquierda-izquierda') : (doble ? 'derecha-izquierda' : 'derecha-derecha');
+        const clave = (izqPesa ? 'I' : 'D') + (doble ? (izqPesa ? 'D' : 'I') : (izqPesa ? 'I' : 'D')) as Paso['caso'];
+        this.pasos[this.pasos.length - 1].caso = clave;
         if (doble) {
             const nieto = (izqPesa ? hijo.der : hijo.izq) as Nodo;
             this.paso(codigo, linea, 'rota', 'Caso ' + caso + ', el peso está en zigzag. Hace falta una rotación doble. Primero se rota ' + hijo.valor + ' a la ' + (izqPesa ? 'izquierda' : 'derecha') + ' para enderezarlo.',
