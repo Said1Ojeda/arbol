@@ -186,6 +186,62 @@ class Arbol {
         return this.tomarPasos();
     }
 
+    recorrido(tipo: Recorrido): Paso[] {
+        const lista: number[] = [];
+        const visitados: Record<number, Marca> = {};
+        if (!this.raiz) {
+            this.paso(tipo, 1, 'error', 'El árbol está vacío, no hay nada que recorrer.', {}, { lista: [] });
+            return this.tomarPasos();
+        }
+        const lineas = {
+            inorden: { izq: 2, visita: 3, der: 4 },
+            preorden: { visita: 2, izq: 3, der: 4 },
+            postorden: { izq: 2, der: 3, visita: 4 }
+        };
+        const visitar = (n: Nodo, linea: number) => {
+            lista.push(n.valor);
+            visitados[n.id] = 'visitado';
+            this.paso(tipo, linea, 'visita', 'Visito ' + n.valor + '.', { ...visitados }, { lista: [...lista] });
+        };
+        const bajar = (n: Nodo, hijo: Nodo, lado: Lado, linea: number) => {
+            this.paso(tipo, linea, 'info', 'Desde ' + n.valor + ' bajo por la ' + (lado === 'izq' ? 'izquierda' : 'derecha') + ' a ' + hijo.valor + '.',
+                { ...visitados, [hijo.id]: 'compara' }, { lista: [...lista], rapido: true });
+        };
+
+        if (tipo === 'niveles') {
+            const cola: Nodo[] = [this.raiz];
+            this.paso(tipo, 1, 'info', 'La cola empieza con la raíz.', { [this.raiz.id]: 'compara' }, { lista: [], cola: [this.raiz.valor] });
+            while (cola.length) {
+                const n = cola.shift() as Nodo;
+                lista.push(n.valor);
+                visitados[n.id] = 'visitado';
+                const hijos = [n.izq, n.der].filter((h): h is Nodo => h !== null);
+                cola.push(...hijos);
+                this.paso(tipo, 4, 'visita', 'Saco ' + n.valor + ' de la cola y lo visito.' + (hijos.length ? ' Entran sus hijos: ' + hijos.map(h => h.valor).join(' y ') + '.' : ''),
+                    { ...visitados, ...Object.fromEntries(cola.map(c => [c.id, 'camino' as Marca])) }, { lista: [...lista], cola: cola.map(c => c.valor) });
+            }
+        } else {
+            const l = lineas[tipo];
+            const ir = (n: Nodo) => {
+                if (tipo === 'preorden') visitar(n, l.visita);
+                if (n.izq) { bajar(n, n.izq, 'izq', l.izq); ir(n.izq); }
+                if (tipo === 'inorden') visitar(n, l.visita);
+                if (n.der) { bajar(n, n.der, 'der', l.der); ir(n.der); }
+                if (tipo === 'postorden') visitar(n, l.visita);
+            };
+            ir(this.raiz);
+        }
+
+        const cierre: Record<Recorrido, string> = {
+            inorden: 'Quedó de menor a mayor. En un árbol de búsqueda el inorden siempre sale ordenado.',
+            preorden: 'Primero el papá y después los hijos. Si insertas en este orden en un árbol vacío, sale el mismo árbol.',
+            postorden: 'Los hijos antes que el papá. Así se borra un árbol entero sin dejar nodos colgando.',
+            niveles: 'Piso por piso, de izquierda a derecha. La cola es la que hace que salga por niveles.'
+        };
+        this.paso(tipo, 0, 'encontrado', cierre[tipo], { ...visitados }, { lista: [...lista], cola: tipo === 'niveles' ? [] : undefined });
+        return this.tomarPasos();
+    }
+
     // arma el arbol sin pasos, para los ejemplos y para cambiar de modo
     construir(valores: number[]) {
         this.raiz = null;

@@ -506,6 +506,75 @@ button, input {
   font-weight: 600;
 }
 
+/* recorridos, la lista se llena como fila de semillas */
+.botones-recorrido {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.lista-recorrido,
+.cola ol {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 40px;
+  margin-top: 12px;
+}
+
+.lista-recorrido:empty::before {
+  content: "Escoge un recorrido para ver en qué orden se visitan los nodos.";
+  color: var(--tinta-suave);
+  font-size: .92rem;
+}
+
+.lista-recorrido li {
+  display: grid;
+  place-items: center;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 8px;
+  border-radius: 99px;
+  background: var(--cielo);
+  color: #fff;
+  font-weight: 600;
+}
+
+.lista-recorrido li.entra {
+  animation: entra-semilla .4s cubic-bezier(.3, 1.6, .5, 1);
+}
+
+@keyframes entra-semilla {
+  from { transform: scale(.2) translateY(-10px); opacity: 0; }
+}
+
+.cola {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  color: var(--tinta-suave);
+  font-size: .9rem;
+}
+
+.cola ol {
+  margin-top: 0;
+  min-height: 32px;
+}
+
+.cola li {
+  display: grid;
+  place-items: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 6px;
+  border: 2px dashed var(--cielo);
+  border-radius: 10px;
+  color: var(--tinta);
+  font-weight: 600;
+}
+
 .datos dl {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

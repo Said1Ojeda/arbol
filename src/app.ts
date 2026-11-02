@@ -42,6 +42,27 @@
         btnAnt.disabled = actual === 0;
         btnSig.disabled = actual >= pasos.length - 1;
         pintarDatos(p.foto);
+        pintarLista(p);
+    }
+
+    // la lista del recorrido y la cola, se van llenando con cada paso
+    function pintarLista(p: Paso) {
+        const lista = $('lista');
+        const antes = lista.children.length;
+        lista.replaceChildren(...(p.lista ?? []).map((v, i) => {
+            const li = document.createElement('li');
+            li.textContent = String(v);
+            if (i >= antes) li.classList.add('entra');
+            return li;
+        }));
+        const cola = $('cola');
+        cola.hidden = !p.cola;
+        $('cola-lista').replaceChildren(...(p.cola ?? []).map(v => {
+            const li = document.createElement('li');
+            li.textContent = String(v);
+            return li;
+        }));
+        document.querySelectorAll<HTMLButtonElement>('[data-recorrido]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.recorrido === p.codigo)));
     }
 
     function tocar(si: boolean) {
@@ -50,7 +71,8 @@
         btnPlay.setAttribute('aria-label', tocando ? 'Pausar' : 'Reproducir');
         btnPlay.title = btnPlay.getAttribute('aria-label') || '';
         clearTimeout(reloj);
-        if (tocando) reloj = window.setTimeout(avanzar, BASE / Number(velocidad.value));
+        const siguiente = pasos[actual + 1];
+        if (tocando) reloj = window.setTimeout(avanzar, BASE * (siguiente?.rapido ? .55 : 1) / Number(velocidad.value));
     }
 
     function avanzar() {
@@ -181,6 +203,10 @@
         const e = EJEMPLOS[b.dataset.ejemplo || ''];
         arbol.construir(e.valores);
         cargar([pasoQuieto(e.mensaje)], false);
+    }));
+
+    document.querySelectorAll<HTMLButtonElement>('[data-recorrido]').forEach(b => b.addEventListener('click', () => {
+        cargar(arbol.recorrido(b.dataset.recorrido as Recorrido));
     }));
 
     // tocar un nodo pone su numero en la caja, asi se busca o se elimina rapido

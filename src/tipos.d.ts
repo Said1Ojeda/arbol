@@ -1,6 +1,7 @@
 // tipos que comparten el modelo, el dibujo y la pantalla
 
 type ModoArbol = 'abb' | 'avl';
+type Recorrido = 'inorden' | 'preorden' | 'postorden' | 'niveles';
 type Lado = 'izq' | 'der';
 
 // como se ve cada nodo en un paso, compara es el que se esta revisando
@@ -36,6 +37,8 @@ interface Paso {
     hueco?: { padre: number; lado: Lado };
     lista?: number[];
     cola?: number[];
+    // los pasos de solo bajar duran menos, si no los recorridos se hacen eternos
+    rapido?: boolean;
 }
 
 interface Resumen {
