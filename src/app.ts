@@ -34,6 +34,13 @@
         const p = pasos[actual];
         if (!p) return;
         escena.pintar(p, { fb: arbol.modo === 'avl' });
+        if (actual > 0 || pasos.length === 1) {
+            const quien = Object.keys(p.marcas).map(Number).find(id => p.marcas[id] === 'compara' || p.marcas[id] === 'nuevo' || p.marcas[id] === 'encontrado' || p.marcas[id] === 'rota');
+            const valor = p.flotante?.valor ?? (quien !== undefined ? p.foto.nodos[quien]?.valor : p.lista?.[p.lista.length - 1]) ?? 0;
+            if (pasos.length > 1) Sonido.sonar(p.tono, valor);
+        }
+        if (fichaDe !== null && !p.foto.nodos[fichaDe]) cerrarFicha();
+        else if (fichaDe !== null) pintarFicha(fichaDe, p.foto);
         const m = $('mensaje');
         m.textContent = p.mensaje;
         m.className = 'mensaje ' + p.tono;
@@ -242,15 +249,112 @@
         cargar(arbol.recorrido(b.dataset.recorrido as Recorrido));
     }));
 
-    // tocar un nodo pone su numero en la caja, asi se busca o se elimina rapido
+    // tocar un nodo abre su ficha y pone su numero en la caja
+    let fichaDe: number | null = null;
+
     escena.alTocar = id => {
-        const n = pasos[actual]?.foto.nodos[id];
-        if (!n) return;
+        const f = pasos[actual]?.foto;
+        const n = f?.nodos[id];
+        if (!f || !n) return;
         entrada.value = String(n.valor);
         aviso.textContent = '';
-        entrada.focus();
-        entrada.select();
+        fichaDe = id;
+        escena.elegido = id;
+        mostrar();
+        Sonido.sonar('compara', n.valor);
     };
+
+    function pintarFicha(id: number, f: Foto) {
+        const n = f.nodos[id];
+        // camino desde la raiz, de paso sale el nivel
+        const camino: number[] = [];
+        let cur = f.raiz;
+        while (cur !== null) {
+            const c = f.nodos[cur];
+            camino.push(c.valor);
+            if (c.id === id) break;
+            cur = n.valor < c.valor ? c.izq : c.der;
+        }
+        const tam = (x: number | null): number => x === null ? 0 : 1 + tam(f.nodos[x].izq) + tam(f.nodos[x].der);
+        const alt = (x: number | null) => x === null ? 0 : f.nodos[x].altura;
+        const hijos = [n.izq, n.der].filter((h): h is number => h !== null).map(h => f.nodos[h].valor);
+        const fb = alt(n.izq) - alt(n.der);
+        const filas: [string, string][] = [
+            ['Nivel', String(camino.length - 1)],
+            ['Altura', String(n.altura)],
+            ['Factor de balance', (fb > 0 ? '+' : '') + fb],
+            ['Hijos', hijos.length ? hijos.join(' y ') : 'Ninguno, es hoja'],
+            ['Nodos en su subárbol', String(tam(id))]
+        ];
+        $('ficha-titulo').textContent = id === f.raiz ? 'Nodo ' + n.valor + ', la raíz' : 'Nodo ' + n.valor;
+        $('ficha-datos').replaceChildren(...filas.map(([t, v]) => {
+            const d = document.createElement('div');
+            const dt = document.createElement('dt');
+            dt.textContent = t;
+            const dd = document.createElement('dd');
+            dd.textContent = v;
+            d.append(dt, dd);
+            return d;
+        }));
+        $('ficha-camino').textContent = camino.length > 1 ? 'Para llegar: ' + camino.join(', ') : 'Aquí empieza toda búsqueda.';
+        const ficha = $('ficha');
+        ficha.hidden = false;
+        // la ficha se va al lado contrario del nodo para no taparlo
+        const donde = escena.posicion(id);
+        const caja = ficha.parentElement!.getBoundingClientRect();
+        if (donde) ficha.classList.toggle('derecha', donde.x - caja.left < caja.width / 2);
+    }
+
+    function cerrarFicha() {
+        fichaDe = null;
+        escena.elegido = null;
+        $('ficha').hidden = true;
+        const p = pasos[actual];
+        if (p) escena.pintar(p, { fb: arbol.modo === 'avl' });
+    }
+
+    $('cerrar-ficha').addEventListener('click', cerrarFicha);
+    $('ficha-buscar').addEventListener('click', () => { cerrarFicha(); hacer('buscar'); });
+    $('ficha-eliminar').addEventListener('click', () => { cerrarFicha(); hacer('eliminar'); });
+
+    const botonSonido = $<HTMLButtonElement>('sonido');
+    const pintarSonido = () => {
+        const si = Sonido.estaPrendido();
+        botonSonido.textContent = si ? '🔊' : '🔇';
+        botonSonido.setAttribute('aria-pressed', String(si));
+    };
+    botonSonido.addEventListener('click', () => { Sonido.alternar(); pintarSonido(); });
+    pintarSonido();
+
+    // el enlace lleva los numeros por niveles y el modo, al abrirlo sale el mismo arbol
+    $('compartir').addEventListener('click', async () => {
+        const url = new URL(location.href);
+        url.search = '';
+        url.searchParams.set('a', arbol.valores().join(','));
+        url.searchParams.set('m', arbol.modo);
+        const texto = url.toString();
+        try {
+            if (navigator.share && matchMedia('(pointer: coarse)').matches) await navigator.share({ title: 'Mi árbol', url: texto });
+            else {
+                await navigator.clipboard.writeText(texto);
+                aviso.textContent = 'Enlace copiado, al abrirlo sale este mismo árbol.';
+            }
+        } catch (e) {
+            aviso.textContent = texto;
+        }
+    });
+
+    function leerEnlace(): boolean {
+        const q = new URLSearchParams(location.search);
+        const a = q.get('a');
+        if (!a) return false;
+        const valores = a.split(',').map(Number).filter(v => Number.isInteger(v) && Math.abs(v) <= 999).slice(0, MAX);
+        if (!valores.length) return false;
+        ponerModo(q.get('m') === 'avl' ? 'avl' : 'abb', false);
+        arbol.construir(valores);
+        cargar([pasoQuieto('Este es el árbol que te compartieron. Inserta, busca o toca un nodo para ver sus datos.')], false);
+        return true;
+    }
 
     $('aleatorio').addEventListener('click', () => {
         const cuantos = 7 + Math.floor(Math.random() * 5);
@@ -289,6 +393,8 @@
         else if (ev.key === 'ArrowLeft') ir(-1);
     });
 
-    arbol.construir(EJEMPLOS.balanceado.valores);
-    cargar([pasoQuieto('Escribe un número y dale a Insertar para ver por dónde baja.')], false);
+    if (!leerEnlace()) {
+        arbol.construir(EJEMPLOS.balanceado.valores);
+        cargar([pasoQuieto('Escribe un número y dale a Insertar para ver por dónde baja. Toca un nodo para ver sus datos.')], false);
+    }
 })();

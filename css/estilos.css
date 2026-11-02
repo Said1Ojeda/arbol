@@ -112,6 +112,105 @@ button, input {
   font-size: .95rem;
 }
 
+.herramientas {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.redondo {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--linea);
+  border-radius: 50%;
+  background: var(--hoja-papel);
+  font-size: 1.15rem;
+  cursor: pointer;
+}
+
+/* la ficha del nodo que tocaste, flota abajo a la izquierda del escenario */
+.ficha-nodo {
+  position: absolute;
+  left: 16px;
+  bottom: 92px;
+  z-index: 3;
+  width: min(300px, calc(100% - 32px));
+  padding: 16px;
+  border: 2px solid var(--linea);
+  border-radius: 20px;
+  background: var(--semilla);
+  box-shadow: var(--sombra);
+  animation: aparece .3s cubic-bezier(.3, 1.4, .5, 1);
+}
+
+.ficha-nodo.derecha {
+  left: auto;
+  right: 16px;
+}
+
+.ficha-nodo[hidden] {
+  display: none;
+}
+
+@keyframes aparece {
+  from { transform: translateY(10px) scale(.96); opacity: 0; }
+}
+
+.cerrar-ficha {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--tinta-suave);
+  cursor: pointer;
+}
+
+.ficha-titulo {
+  margin-bottom: 8px;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.ficha-datos div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--linea);
+  font-size: .92rem;
+}
+
+.ficha-datos dt {
+  color: var(--tinta-suave);
+}
+
+.ficha-datos dd {
+  font-weight: 600;
+  text-align: right;
+}
+
+.ficha-camino {
+  margin: 8px 0 12px;
+  color: var(--tinta-suave);
+  font-size: .88rem;
+}
+
+.ficha-botones {
+  display: flex;
+  gap: 8px;
+}
+
+.ficha-botones .boton {
+  flex: 1;
+  padding: 9px 12px;
+}
+
 /* selector de tipo de arbol, una pastilla con dos lados */
 .selector-modo {
   display: inline-flex;
@@ -228,6 +327,29 @@ button, input {
 
 .nodo {
   cursor: pointer;
+}
+
+.nodo:focus {
+  outline: none;
+}
+
+.nodo .aro {
+  fill: none;
+  stroke: var(--brote);
+  stroke-width: 3;
+  stroke-dasharray: 4 5;
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+
+.nodo.elegido .aro {
+  opacity: 1;
+  animation: gira 6s linear infinite;
+  transform-origin: 0 0;
+}
+
+@keyframes gira {
+  to { transform: rotate(360deg); }
 }
 
 .nodo .bola {
