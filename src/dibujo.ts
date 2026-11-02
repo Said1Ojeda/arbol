@@ -47,6 +47,8 @@ class Escenario {
     private sinMovimiento = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     alTocar: ((id: number) => void) | null = null;
+    // el nodo que tocaste lleva un aro, aunque el paso le ponga otra marca
+    elegido: number | null = null;
     alHueco: ((padre: number, lado: Lado) => void) | null = null;
 
     constructor(private svg: SVGSVGElement) {
@@ -95,7 +97,6 @@ class Escenario {
 
     private nuevoNodo(id: number, valor: number, x: number, y: number): Elem {
         const g = this.crear('g', 'nodo', this.capaNodos) as SVGGElement;
-        g.setAttribute('tabindex', '-1');
         // dos hojitas que solo se ven cuando el nodo es hoja
         const hojas = this.crear('g', 'hojitas', g);
         // cuelgan para abajo porque en computacion los arboles crecen de cabeza
@@ -104,6 +105,8 @@ class Escenario {
             h.setAttribute('d', 'M0 0 C 6 -8, 16 -8, 20 0 C 16 6, 6 6, 0 0 Z');
             h.setAttribute('transform', 'translate(' + dx + ' ' + (R - 4) + ') rotate(' + giro + ')');
         }
+        const aro = this.crear('circle', 'aro', g);
+        aro.setAttribute('r', String(R + 7));
         const c = this.crear('circle', 'bola', g);
         c.setAttribute('r', String(R));
         const brillo = this.crear('circle', 'brillo', g);
@@ -155,7 +158,7 @@ class Escenario {
                 e.g.classList.add('cambia');
             }
             const marca = marcas[id];
-            e.g.setAttribute('class', 'nodo' + (marca ? ' ' + marca : '') + (n.izq === null && n.der === null ? ' es-hoja' : ''));
+            e.g.setAttribute('class', 'nodo' + (marca ? ' ' + marca : '') + (n.izq === null && n.der === null ? ' es-hoja' : '') + (id === this.elegido ? ' elegido' : ''));
             e.g.setAttribute('aria-label', 'Nodo ' + n.valor);
             const fb = (n.izq !== null ? foto.nodos[n.izq].altura : 0) - (n.der !== null ? foto.nodos[n.der].altura : 0);
             e.insigniaTexto.textContent = (fb > 0 ? '+' : '') + fb;

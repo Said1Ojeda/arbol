@@ -126,6 +126,8 @@ class Arbol {
         const ladoAlto = izqPesa ? 'izquierdo' : 'derecho';
         this.paso(codigo, linea, 'rota', n.valor + ' quedó desbalanceado. Su lado ' + ladoAlto + ' mide ' + Math.max(Arbol.altura(n.izq), Arbol.altura(n.der)) + ' y el otro ' + Math.min(Arbol.altura(n.izq), Arbol.altura(n.der)) + ', el factor de balance es ' + (fb > 0 ? '+' : '') + fb + '.', { [n.id]: 'desbalance', [hijo.id]: 'camino' });
         const caso = izqPesa ? (doble ? 'izquierda-derecha' : 'izquierda-izquierda') : (doble ? 'derecha-izquierda' : 'derecha-derecha');
+        const clave = (izqPesa ? 'I' : 'D') + (doble ? (izqPesa ? 'D' : 'I') : (izqPesa ? 'I' : 'D'));
+        this.pasos[this.pasos.length - 1].caso = clave;
         if (doble) {
             const nieto = (izqPesa ? hijo.der : hijo.izq);
             this.paso(codigo, linea, 'rota', 'Caso ' + caso + ', el peso está en zigzag. Hace falta una rotación doble. Primero se rota ' + hijo.valor + ' a la ' + (izqPesa ? 'izquierda' : 'derecha') + ' para enderezarlo.', { [n.id]: 'desbalance', [hijo.id]: 'rota', [nieto.id]: 'rota' });

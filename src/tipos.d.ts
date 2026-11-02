@@ -39,6 +39,8 @@ interface Paso {
     cola?: number[];
     // los pasos de solo bajar duran menos, si no los recorridos se hacen eternos
     rapido?: boolean;
+    // en avl dice cual de los cuatro casos de rotacion fue, lo usan los retos
+    caso?: 'II' | 'DD' | 'ID' | 'DI';
 }
 
 interface Resumen {
