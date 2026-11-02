@@ -1032,6 +1032,17 @@ body[data-vista="retos"] .selector-modo {
 }
 
 @media (max-width: 560px) {
+  /* en el cel la ficha sale de abajo de la pantalla, encima del arbol no cabe */
+  .ficha-nodo,
+  .ficha-nodo.derecha {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    width: auto;
+    z-index: 20;
+  }
+
   .cabecera,
   .mesa {
     padding-left: 12px;
