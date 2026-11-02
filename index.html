@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Árbol · árboles binarios paso a paso</title>
+<meta name="description" content="Mira cómo se arma un árbol binario de búsqueda y un AVL paso a paso: insertar, buscar, eliminar, recorridos y rotaciones animadas.">
+<meta name="theme-color" content="#3FA66B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+<header class="cabecera">
+  <div class="marca">
+    <svg class="brote" viewBox="0 0 40 40" aria-hidden="true">
+      <path d="M20 36 V18" />
+      <path class="hoja-a" d="M20 22 C 10 22, 6 14, 8 8 C 16 8, 20 14, 20 22 Z" />
+      <path class="hoja-b" d="M20 18 C 28 18, 34 12, 32 4 C 24 4, 20 10, 20 18 Z" />
+    </svg>
+    <div>
+      <h1>Árbol</h1>
+      <p class="lema">Árboles binarios que se arman frente a ti</p>
+    </div>
+  </div>
+</header>
+
+<main class="mesa">
+  <section class="escena" aria-label="Árbol">
+    <p class="mensaje info" id="mensaje" aria-live="polite"></p>
+    <svg id="lienzo" role="img" aria-label="Dibujo del árbol"></svg>
+    <p class="vacio" id="vacio" hidden>Todavía no hay árbol. Escribe un número y dale a Insertar, o prueba con uno aleatorio.</p>
+    <div class="reproductor" role="group" aria-label="Controles de la animación">
+      <button class="ctrl" type="button" id="ant" aria-label="Paso anterior" title="Paso anterior">
+        <svg viewBox="0 0 24 24"><path d="M15 6 9 12l6 6"/></svg>
+      </button>
+      <button class="ctrl principal" type="button" id="play" aria-label="Pausar" title="Pausar">
+        <svg viewBox="0 0 24 24" class="i-pausa"><path d="M9 6v12M15 6v12"/></svg>
+        <svg viewBox="0 0 24 24" class="i-play"><path d="M8 5l11 7-11 7z"/></svg>
+      </button>
+      <button class="ctrl" type="button" id="sig" aria-label="Paso siguiente" title="Paso siguiente">
+        <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+      <span class="contador" id="contador"></span>
+      <label class="velocidad">
+        <span>Velocidad</span>
+        <input type="range" id="velocidad" min="0.5" max="3" step="0.25" value="1">
+      </label>
+    </div>
+  </section>
+
+  <aside class="panel">
+    <form class="agregar" id="form" autocomplete="off">
+      <label for="valor">Número</label>
+      <div class="fila-entrada">
+        <input id="valor" type="number" inputmode="numeric" min="-999" max="999" step="1" placeholder="Ej. 42" required>
+        <button class="boton brote-btn" type="submit" data-accion="insertar">Insertar</button>
+        <button class="boton cielo-btn" type="button" data-accion="buscar">Buscar</button>
+      </div>
+      <p class="aviso" id="aviso" role="status"></p>
+    </form>
+
+    <div class="semillas">
+      <button class="chip" type="button" id="aleatorio">🎲 Aleatorio</button>
+      <button class="chip" type="button" data-ejemplo="balanceado">Balanceado</button>
+      <button class="chip" type="button" data-ejemplo="escalera">En escalera</button>
+      <button class="chip" type="button" id="vaciar">Vaciar</button>
+    </div>
+
+    <section class="tarjeta datos" aria-labelledby="t-datos">
+      <h2 id="t-datos">Cómo va el árbol</h2>
+      <dl id="datos"></dl>
+    </section>
+  </aside>
+</main>
+
+<script src="js/pseudo.js"></script>
+<script src="js/arbol.js"></script>
+<script src="js/dibujo.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
