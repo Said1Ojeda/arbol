@@ -531,6 +531,58 @@ button, input {
   font-weight: 600;
 }
 
+/* pseudocodigo, la linea actual se ilumina */
+.codigo[hidden] {
+  display: none;
+}
+
+.pseudo {
+  list-style: none;
+  counter-reset: linea;
+  padding: 10px 0;
+  border-radius: 14px;
+  background: var(--tinta);
+  color: color-mix(in srgb, var(--hoja-papel) 78%, transparent);
+  font: 400 .8rem/1.55 var(--mono);
+}
+
+.pseudo li {
+  position: relative;
+  padding: 2px 12px 2px 38px;
+  white-space: pre-wrap;
+  transition: background .2s ease, color .2s ease;
+}
+
+.pseudo li::before {
+  counter-increment: linea;
+  content: counter(linea);
+  position: absolute;
+  left: 12px;
+  opacity: .4;
+}
+
+.pseudo li.activa {
+  background: color-mix(in srgb, var(--sol) 26%, transparent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.pseudo li.activa::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--sol);
+}
+
+.pseudo li.apagada {
+  opacity: .35;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
 /* recorridos, la lista se llena como fila de semillas */
 .botones-recorrido {
   display: flex;
@@ -572,6 +624,10 @@ button, input {
 
 @keyframes entra-semilla {
   from { transform: scale(.2) translateY(-10px); opacity: 0; }
+}
+
+.cola[hidden] {
+  display: none;
 }
 
 .cola {

@@ -42,6 +42,32 @@
         btnSig.disabled = actual >= pasos.length - 1;
         pintarDatos(p.foto);
         pintarLista(p);
+        pintarCodigo(p);
+    }
+    // el pseudocodigo con la linea del paso encendida
+    // las lineas de altura y rotar solo aplican en avl, en el otro modo se ven apagadas
+    let codigoPintado = '';
+    function pintarCodigo(p) {
+        const lista = $('pseudo');
+        const lineas = PSEUDO[p.codigo];
+        lista.parentElement.hidden = !lineas;
+        if (!lineas)
+            return;
+        const clave = p.codigo + arbol.modo;
+        if (clave !== codigoPintado) {
+            codigoPintado = clave;
+            lista.replaceChildren(...lineas.map((t, i) => {
+                const li = document.createElement('li');
+                li.textContent = t;
+                const soloAvl = (p.codigo === 'insertar' && i >= 5) || (p.codigo === 'eliminar' && i === 7);
+                if (soloAvl && arbol.modo !== 'avl') {
+                    li.classList.add('apagada');
+                    li.title = 'Solo en AVL';
+                }
+                return li;
+            }));
+        }
+        [...lista.children].forEach((li, i) => li.classList.toggle('activa', i === p.linea));
     }
     // la lista del recorrido y la cola, se van llenando con cada paso
     function pintarLista(p) {
