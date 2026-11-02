@@ -58,6 +58,7 @@
         <input id="valor" type="number" inputmode="numeric" min="-999" max="999" step="1" placeholder="Ej. 42" required>
         <button class="boton brote-btn" type="submit" data-accion="insertar">Insertar</button>
         <button class="boton cielo-btn" type="button" data-accion="buscar">Buscar</button>
+        <button class="boton ciruela-btn" type="button" data-accion="eliminar">Eliminar</button>
       </div>
       <p class="aviso" id="aviso" role="status"></p>
     </form>
@@ -68,6 +69,21 @@
       <button class="chip" type="button" data-ejemplo="escalera">En escalera</button>
       <button class="chip" type="button" id="vaciar">Vaciar</button>
     </div>
+
+    <section class="tarjeta recorridos" aria-labelledby="t-recorridos">
+      <h2 id="t-recorridos">Recorridos</h2>
+      <div class="botones-recorrido">
+        <button class="chip" type="button" data-recorrido="inorden" title="Izquierda, nodo, derecha">Inorden</button>
+        <button class="chip" type="button" data-recorrido="preorden" title="Nodo, izquierda, derecha">Preorden</button>
+        <button class="chip" type="button" data-recorrido="postorden" title="Izquierda, derecha, nodo">Postorden</button>
+        <button class="chip" type="button" data-recorrido="niveles" title="Piso por piso con una cola">Por niveles</button>
+      </div>
+      <ol class="lista-recorrido" id="lista" aria-label="Orden de visita"></ol>
+      <div class="cola" id="cola" hidden>
+        <span>Cola</span>
+        <ol id="cola-lista" aria-label="Nodos en la cola"></ol>
+      </div>
+    </section>
 
     <section class="tarjeta datos" aria-labelledby="t-datos">
       <h2 id="t-datos">Cómo va el árbol</h2>
