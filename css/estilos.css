@@ -404,8 +404,12 @@ button, input {
   gap: 8px;
 }
 
+.fila-entrada {
+  flex-wrap: wrap;
+}
+
 .fila-entrada input {
-  flex: 1;
+  flex: 1 1 100%;
   min-width: 0;
   padding: 12px 14px;
   border: 2px solid var(--linea);
@@ -418,6 +422,10 @@ button, input {
 .fila-entrada input:focus {
   outline: none;
   border-color: var(--brote);
+}
+
+.fila-entrada .boton {
+  flex: 1;
 }
 
 .boton {

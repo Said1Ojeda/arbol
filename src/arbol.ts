@@ -98,13 +98,70 @@ class Arbol {
             }
             n = siguiente;
         }
-        this.subir(camino, visitados);
+        this.subir(camino, 'insertar');
         return this.tomarPasos();
     }
 
     // regresa por el camino actualizando alturas, en avl ademas balancea
-    protected subir(camino: Nodo[], _marcas: Record<number, Marca>) {
+    protected subir(camino: Nodo[], _codigo: string) {
         for (let k = camino.length - 1; k >= 0; k--) this.actualizar(camino[k]);
+    }
+
+    eliminar(v: number): Paso[] {
+        const camino: Nodo[] = [];
+        const visitados: Record<number, Marca> = {};
+        let n = this.raiz;
+        this.paso('eliminar', 1, 'info', 'Para eliminar ' + v + ' primero hay que encontrarlo.', {}, { flotante: { valor: v, en: n?.id ?? null } });
+        while (n && n.valor !== v) {
+            const lado: Lado = v < n.valor ? 'izq' : 'der';
+            this.paso('eliminar', 1, 'compara', v + (lado === 'izq' ? ' es menor que ' : ' es mayor que ') + n.valor + ', sigo por la ' + (lado === 'izq' ? 'izquierda.' : 'derecha.'),
+                { ...visitados, [n.id]: 'compara' }, { flotante: { valor: v, en: n.id } });
+            visitados[n.id] = 'camino';
+            camino.push(n);
+            n = n[lado];
+        }
+        if (!n) {
+            this.paso('eliminar', 1, 'error', v + ' no está en el árbol, no hay nada que eliminar.', visitados);
+            return this.tomarPasos();
+        }
+        const padre = camino[camino.length - 1] ?? null;
+        const objetivo = n;
+
+        if (!n.izq && !n.der) {
+            this.paso('eliminar', 2, 'borrar', v + ' es hoja, no tiene hijos. Se quita sin mover nada más.', { ...visitados, [n.id]: 'borrar' });
+            this.reemplazar(padre, n, null);
+            this.paso('eliminar', 2, 'borrar', 'Listo, ' + v + ' ya no está.', visitados);
+            this.subir(camino, 'eliminar');
+            return this.tomarPasos();
+        }
+
+        if (!n.izq || !n.der) {
+            const hijo = (n.izq ?? n.der) as Nodo;
+            this.paso('eliminar', 3, 'borrar', v + ' tiene un solo hijo, ' + hijo.valor + '. Ese hijo sube a ocupar su lugar con todo lo que cuelga de él.', { ...visitados, [n.id]: 'borrar', [hijo.id]: 'camino' });
+            this.reemplazar(padre, n, hijo);
+            this.paso('eliminar', 3, 'nuevo', hijo.valor + ' subió al lugar de ' + v + '.', { ...visitados, [hijo.id]: 'nuevo' });
+            this.subir(camino, 'eliminar');
+            return this.tomarPasos();
+        }
+
+        // dos hijos, el sucesor es el menor de la derecha y nunca tiene hijo izquierdo
+        this.paso('eliminar', 4, 'borrar', v + ' tiene dos hijos. No se puede quitar así nomás, lo vamos a cambiar por su sucesor.', { ...visitados, [n.id]: 'borrar' });
+        const bajada: Nodo[] = [n];
+        let suc = n.der as Nodo;
+        let padreSuc = n;
+        this.paso('eliminar', 5, 'compara', 'El sucesor es el menor de su lado derecho. Bajo una vez a la derecha, a ' + suc.valor + '.', { ...visitados, [n.id]: 'borrar', [suc.id]: 'sucesor' });
+        while (suc.izq) {
+            bajada.push(suc);
+            padreSuc = suc;
+            suc = suc.izq;
+            this.paso('eliminar', 5, 'compara', 'Y luego todo a la izquierda que se pueda, a ' + suc.valor + '.', { ...visitados, [n.id]: 'borrar', [suc.id]: 'sucesor' });
+        }
+        this.paso('eliminar', 5, 'info', suc.valor + ' es el sucesor, el número que sigue después de ' + v + '. Con él arriba todo sigue en orden.', { ...visitados, [n.id]: 'borrar', [suc.id]: 'sucesor' });
+        objetivo.valor = suc.valor;
+        this.reemplazar(padreSuc, suc, suc.der);
+        this.paso('eliminar', 6, 'nuevo', 'Se copió ' + objetivo.valor + ' al lugar de ' + v + ' y se quitó el ' + objetivo.valor + ' de abajo.', { ...visitados, [objetivo.id]: 'nuevo' });
+        this.subir([...camino, ...bajada], 'eliminar');
+        return this.tomarPasos();
     }
 
     buscar(v: number): Paso[] {

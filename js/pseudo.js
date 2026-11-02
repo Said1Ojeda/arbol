@@ -10,6 +10,16 @@ const PSEUDO = {
         '  actualizar la altura de nodo',
         '  si |fb| > 1: rotar para balancear'
     ],
+    eliminar: [
+        'eliminar(v):',
+        '  buscar el nodo que tiene v',
+        '  si es hoja: se quita y ya',
+        '  si tiene un hijo: el hijo sube a su lugar',
+        '  si tiene dos hijos: buscar su sucesor,',
+        '    el menor de su lado derecho',
+        '  copiar el sucesor arriba y quitarlo de abajo',
+        '  actualizar alturas y balancear hacia arriba'
+    ],
     buscar: [
         'buscar(nodo, v):',
         '  si nodo está vacío: no está',

@@ -148,6 +148,9 @@
         else if (accion === 'buscar') {
             cargar(arbol.buscar(v));
         }
+        else if (accion === 'eliminar') {
+            cargar(arbol.eliminar(v));
+        }
         entrada.select();
     }
     $('form').addEventListener('submit', ev => {
@@ -167,6 +170,16 @@
         arbol.construir(e.valores);
         cargar([pasoQuieto(e.mensaje)], false);
     }));
+    // tocar un nodo pone su numero en la caja, asi se busca o se elimina rapido
+    escena.alTocar = id => {
+        const n = pasos[actual]?.foto.nodos[id];
+        if (!n)
+            return;
+        entrada.value = String(n.valor);
+        aviso.textContent = '';
+        entrada.focus();
+        entrada.select();
+    };
     $('aleatorio').addEventListener('click', () => {
         const cuantos = 7 + Math.floor(Math.random() * 5);
         const usados = new Set();
