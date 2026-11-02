@@ -1,0 +1,2 @@
+# el js sale de compilar src, asi github cuenta el proyecto como typescript
+js/*.js linguist-generated=true

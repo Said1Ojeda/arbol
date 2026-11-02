@@ -1,0 +1,15 @@
+{
+  "name": "arbol",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Árboles binarios animados paso a paso",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  }
+}
