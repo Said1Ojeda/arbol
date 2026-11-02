@@ -112,6 +112,31 @@ button, input {
   font-size: .95rem;
 }
 
+/* selector de tipo de arbol, una pastilla con dos lados */
+.selector-modo {
+  display: inline-flex;
+  padding: 4px;
+  border: 2px solid var(--linea);
+  border-radius: 99px;
+  background: var(--hoja-papel);
+}
+
+.selector-modo button {
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 99px;
+  background: none;
+  font-weight: 600;
+  color: var(--tinta-suave);
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease;
+}
+
+.selector-modo button[aria-checked="true"] {
+  background: var(--tinta);
+  color: var(--hoja-papel);
+}
+
 /* mesa de trabajo, el escenario grande y el panel al lado */
 .mesa {
   display: grid;
