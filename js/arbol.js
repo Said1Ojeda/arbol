@@ -88,9 +88,59 @@ class Arbol {
         return this.tomarPasos();
     }
     // regresa por el camino actualizando alturas, en avl ademas balancea
-    subir(camino, _codigo) {
-        for (let k = camino.length - 1; k >= 0; k--)
-            this.actualizar(camino[k]);
+    subir(camino, codigo) {
+        const linea = codigo === 'insertar' ? 6 : 7;
+        for (let k = camino.length - 1; k >= 0; k--) {
+            const n = camino[k];
+            this.actualizar(n);
+            if (this.modo !== 'avl')
+                continue;
+            const fb = Arbol.fb(n);
+            if (Math.abs(fb) <= 1)
+                continue;
+            this.balancear(n, camino[k - 1] ?? null, fb, codigo, linea);
+        }
+    }
+    rotarDer(y) {
+        const x = y.izq;
+        y.izq = x.der;
+        x.der = y;
+        this.actualizar(y);
+        this.actualizar(x);
+        return x;
+    }
+    rotarIzq(x) {
+        const y = x.der;
+        x.der = y.izq;
+        y.izq = x;
+        this.actualizar(x);
+        this.actualizar(y);
+        return y;
+    }
+    // los cuatro casos, si el hijo se carga al mismo lado basta una rotacion, si no son dos
+    balancear(n, padre, fb, codigo, linea) {
+        const izqPesa = fb > 1;
+        const hijo = (izqPesa ? n.izq : n.der);
+        const fbHijo = Arbol.fb(hijo);
+        const doble = izqPesa ? fbHijo < 0 : fbHijo > 0;
+        const ladoAlto = izqPesa ? 'izquierdo' : 'derecho';
+        this.paso(codigo, linea, 'rota', n.valor + ' quedó desbalanceado. Su lado ' + ladoAlto + ' mide ' + Math.max(Arbol.altura(n.izq), Arbol.altura(n.der)) + ' y el otro ' + Math.min(Arbol.altura(n.izq), Arbol.altura(n.der)) + ', el factor de balance es ' + (fb > 0 ? '+' : '') + fb + '.', { [n.id]: 'desbalance', [hijo.id]: 'camino' });
+        const caso = izqPesa ? (doble ? 'izquierda-derecha' : 'izquierda-izquierda') : (doble ? 'derecha-izquierda' : 'derecha-derecha');
+        if (doble) {
+            const nieto = (izqPesa ? hijo.der : hijo.izq);
+            this.paso(codigo, linea, 'rota', 'Caso ' + caso + ', el peso está en zigzag. Hace falta una rotación doble. Primero se rota ' + hijo.valor + ' a la ' + (izqPesa ? 'izquierda' : 'derecha') + ' para enderezarlo.', { [n.id]: 'desbalance', [hijo.id]: 'rota', [nieto.id]: 'rota' });
+            if (izqPesa)
+                n.izq = this.rotarIzq(hijo);
+            else
+                n.der = this.rotarDer(hijo);
+            this.paso(codigo, linea, 'rota', 'Ya quedó en línea recta, ' + nieto.valor + ' subió. Ahora la segunda rotación, en ' + n.valor + '.', { [n.id]: 'desbalance', [nieto.id]: 'rota', [hijo.id]: 'rota' });
+        }
+        else {
+            this.paso(codigo, linea, 'rota', 'Caso ' + caso + ', el peso está en línea recta. Basta una rotación simple a la ' + (izqPesa ? 'derecha' : 'izquierda') + ' en ' + n.valor + '.', { [n.id]: 'desbalance', [hijo.id]: 'rota' });
+        }
+        const nueva = izqPesa ? this.rotarDer(n) : this.rotarIzq(n);
+        this.reemplazar(padre, n, nueva);
+        this.paso(codigo, linea, 'rota', nueva.valor + ' subió y ' + n.valor + ' bajó a la ' + (izqPesa ? 'derecha' : 'izquierda') + '. Quedó balanceado y sigue ordenado.', { [nueva.id]: 'rota', [n.id]: 'rota' });
     }
     eliminar(v) {
         const camino = [];
@@ -225,7 +275,8 @@ class Arbol {
         return this.tomarPasos();
     }
     // arma el arbol sin pasos, para los ejemplos y para cambiar de modo
-    construir(valores) {
+    construir(valores, modo = this.modo) {
+        this.modo = modo;
         this.raiz = null;
         for (const v of valores) {
             if (!this.tiene(v))

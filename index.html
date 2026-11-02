@@ -25,6 +25,10 @@
       <p class="lema">Árboles binarios que se arman frente a ti</p>
     </div>
   </div>
+  <div class="selector-modo" role="radiogroup" aria-label="Tipo de árbol">
+    <button type="button" role="radio" aria-checked="true" data-modo="abb">Árbol de búsqueda</button>
+    <button type="button" role="radio" aria-checked="false" data-modo="avl">AVL</button>
+  </div>
 </header>
 
 <main class="mesa">
@@ -67,8 +71,14 @@
       <button class="chip" type="button" id="aleatorio">🎲 Aleatorio</button>
       <button class="chip" type="button" data-ejemplo="balanceado">Balanceado</button>
       <button class="chip" type="button" data-ejemplo="escalera">En escalera</button>
+      <button class="chip" type="button" data-ejemplo="zigzag" title="Para ver una rotación doble en AVL">Zigzag</button>
       <button class="chip" type="button" id="vaciar">Vaciar</button>
     </div>
+
+    <section class="tarjeta codigo" aria-labelledby="t-codigo">
+      <h2 id="t-codigo">Lo que está pasando en el código</h2>
+      <ol class="pseudo" id="pseudo"></ol>
+    </section>
 
     <section class="tarjeta recorridos" aria-labelledby="t-recorridos">
       <h2 id="t-recorridos">Recorridos</h2>

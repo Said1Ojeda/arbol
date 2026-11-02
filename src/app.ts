@@ -43,6 +43,32 @@
         btnSig.disabled = actual >= pasos.length - 1;
         pintarDatos(p.foto);
         pintarLista(p);
+        pintarCodigo(p);
+    }
+
+    // el pseudocodigo con la linea del paso encendida
+    // las lineas de altura y rotar solo aplican en avl, en el otro modo se ven apagadas
+    let codigoPintado = '';
+    function pintarCodigo(p: Paso) {
+        const lista = $('pseudo');
+        const lineas = PSEUDO[p.codigo];
+        lista.parentElement!.hidden = !lineas;
+        if (!lineas) return;
+        const clave = p.codigo + arbol.modo;
+        if (clave !== codigoPintado) {
+            codigoPintado = clave;
+            lista.replaceChildren(...lineas.map((t, i) => {
+                const li = document.createElement('li');
+                li.textContent = t;
+                const soloAvl = (p.codigo === 'insertar' && i >= 5) || (p.codigo === 'eliminar' && i === 7);
+                if (soloAvl && arbol.modo !== 'avl') {
+                    li.classList.add('apagada');
+                    li.title = 'Solo en AVL';
+                }
+                return li;
+            }));
+        }
+        [...lista.children].forEach((li, i) => li.classList.toggle('activa', i === p.linea));
     }
 
     // la lista del recorrido y la cola, se van llenando con cada paso
@@ -196,13 +222,20 @@
 
     const EJEMPLOS: Record<string, { valores: number[]; mensaje: string }> = {
         balanceado: { valores: [50, 30, 70, 20, 40, 60, 80], mensaje: 'Un árbol bien parejo, cada búsqueda toca 3 nodos como mucho.' },
-        escalera: { valores: [10, 20, 30, 40, 50, 60], mensaje: 'Si los números entran ordenados el árbol se vuelve una escalera, casi una lista. Para eso existe el AVL.' }
+        escalera: { valores: [10, 20, 30, 40, 50, 60], mensaje: 'Si los números entran ordenados el árbol se vuelve una escalera, casi una lista. Para eso existe el AVL.' },
+        zigzag: { valores: [50, 20, 70, 10, 40], mensaje: 'Inserta 30 o 45 en modo AVL. El peso queda en zigzag y vas a ver una rotación doble.' }
+    };
+
+    // en avl la escalera sale balanceada, el mensaje tiene que decirlo
+    const MENSAJE_AVL: Record<string, string> = {
+        escalera: 'Mismos números ordenados que hacen la escalera, pero el AVL fue rotando en cada paso y quedó parejo.'
     };
 
     document.querySelectorAll<HTMLButtonElement>('[data-ejemplo]').forEach(b => b.addEventListener('click', () => {
-        const e = EJEMPLOS[b.dataset.ejemplo || ''];
+        const id = b.dataset.ejemplo || '';
+        const e = EJEMPLOS[id];
         arbol.construir(e.valores);
-        cargar([pasoQuieto(e.mensaje)], false);
+        cargar([pasoQuieto(arbol.modo === 'avl' && MENSAJE_AVL[id] ? MENSAJE_AVL[id] : e.mensaje)], false);
     }));
 
     document.querySelectorAll<HTMLButtonElement>('[data-recorrido]').forEach(b => b.addEventListener('click', () => {
@@ -231,6 +264,22 @@
         arbol.construir([]);
         cargar([pasoQuieto('Árbol vacío. El primer número que insertes será la raíz.')], false);
     });
+
+    // cambiar de modo rearma el arbol con los mismos numeros, por niveles para que salga parecido
+    function ponerModo(modo: ModoArbol, avisar = true) {
+        document.querySelectorAll<HTMLButtonElement>('[data-modo]').forEach(b => b.setAttribute('aria-checked', String(b.dataset.modo === modo)));
+        document.body.dataset.modo = modo;
+        if (modo === arbol.modo && avisar) return;
+        const antes = arbol.resumen().altura;
+        arbol.construir(arbol.valores(), modo);
+        const despues = arbol.resumen().altura;
+        if (!avisar) return;
+        cargar([pasoQuieto(modo === 'avl'
+            ? 'Modo AVL. Cada nodo muestra su factor de balance, y si llega a +2 o -2 el árbol rota.' + (despues < antes ? ' Al rearmarlo bajó de ' + antes + ' a ' + despues + ' de altura.' : '')
+            : 'Árbol de búsqueda normal. No se balancea solo, depende del orden en que entren los números.')], false);
+    }
+
+    document.querySelectorAll<HTMLButtonElement>('[data-modo]').forEach(b => b.addEventListener('click', () => ponerModo(b.dataset.modo as ModoArbol)));
 
     // atajos, espacio pausa y las flechas mueven los pasos, si no estas escribiendo
     document.addEventListener('keydown', ev => {
