@@ -426,6 +426,12 @@
         else if (ev.key === 'ArrowRight') ir(1);
         else if (ev.key === 'ArrowLeft') ir(-1);
         else if (ev.key === '/' || ev.key === 'n') { ev.preventDefault(); entrada.focus(); entrada.select(); }
+        else if (ev.key === '+' || ev.key === '-') {
+            // mas y menos mueven la velocidad un paso del slider
+            const paso = Number(velocidad.step) * (ev.key === '+' ? 1 : -1);
+            velocidad.value = String(Math.min(Number(velocidad.max), Math.max(Number(velocidad.min), Number(velocidad.value) + paso)));
+            velocidad.dispatchEvent(new Event('input'));
+        }
     });
 
     if (!leerEnlace()) {

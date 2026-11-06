@@ -424,6 +424,12 @@
             entrada.focus();
             entrada.select();
         }
+        else if (ev.key === '+' || ev.key === '-') {
+            // mas y menos mueven la velocidad un paso del slider
+            const paso = Number(velocidad.step) * (ev.key === '+' ? 1 : -1);
+            velocidad.value = String(Math.min(Number(velocidad.max), Math.max(Number(velocidad.min), Number(velocidad.value) + paso)));
+            velocidad.dispatchEvent(new Event('input'));
+        }
     });
     if (!leerEnlace()) {
         arbol.construir(EJEMPLOS.balanceado.valores);
