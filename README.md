@@ -45,7 +45,7 @@ Los árboles crecen conforme haces puntos, y el récord se guarda en tu navegado
 - **Los nodos tienen un id que no cambia aunque se muevan**, y el dibujo los lleva de su lugar viejo al nuevo. Así una rotación se ve como movimiento y no como un brinco.
 - **El acomodo usa el orden inorden para la posición horizontal**, entonces el árbol se lee de menor a mayor de izquierda a derecha y nunca se enciman los nodos.
 - **Revisado con pruebas al azar**: cientos de árboles con inserciones y eliminaciones mezcladas, comparando contra una lista ordenada y revisando que el AVL nunca pase de factor 1.
-- Sonido opcional, tema claro y oscuro según tu sistema, respeta la opción de reducir movimiento y se usa con teclado. Espacio pausa, las flechas mueven los pasos y la N o la diagonal te llevan directo a escribir el número. Escape cierra la ficha del nodo con más y menos cambias la velocidad, la R arma uno aleatorio y la V lo vacía. Con el signo de pregunta, o el botón de atajos, salen todos en una ventanita. El modo y la velocidad se quedan guardados para la próxima vez.
+- Sonido opcional, tema claro y oscuro según tu sistema, respeta la opción de reducir movimiento y se usa con teclado. Espacio pausa, las flechas mueven los pasos y la N o la diagonal te llevan directo a escribir el número. Escape cierra la ficha del nodo con más y menos cambias la velocidad, la R arma uno aleatorio y la V lo vacía. Con el signo de pregunta, o el botón de atajos, salen todos en una ventanita. Si lo imprimes o lo guardas en PDF sale solo el árbol con sus datos. El modo y la velocidad se quedan guardados para la próxima vez.
 
 ## Cómo está hecho
 

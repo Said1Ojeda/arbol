@@ -1113,3 +1113,13 @@ body[data-vista="retos"] .selector-modo {
   text-align: center;
 }
 .atajos form { text-align: right; }
+
+/* al imprimir sale el arbol y sus datos, sin botones */
+@media print {
+  body { background: #fff; color: #000; }
+  .pestanas, .herramientas, .reproductor, .agregar, .semillas, .codigo, .recorridos, .ficha-nodo, .panel-retos, .atajos, .vacio { display: none !important; }
+  .mesa { display: block; }
+  .escena { box-shadow: none; border-color: #ccc; break-inside: avoid; }
+  .panel { box-shadow: none; }
+  .mensaje { box-shadow: none; }
+}
