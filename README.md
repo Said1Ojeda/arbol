@@ -10,7 +10,7 @@
 
 **Explorar**
 
-- **Insertar, buscar y eliminar** con animación paso a paso. Cada paso dice qué se comparó y para dónde se fue, y el número va bajando en una pastillita junto al nodo.
+- **Insertar, buscar y eliminar** con animación paso a paso. Cada paso dice qué se comparó y para dónde se fue, abajo se cuenta cuántas comparaciones lleva la operación, y el número va bajando en una pastillita junto al nodo.
 - **Eliminar con sus tres casos**: si es hoja se quita, si tiene un hijo ese hijo sube, y si tiene dos se busca el sucesor y se copia.
 - **Modo AVL** con el factor de balance encima de cada nodo. Cuando un nodo llega a +2 o -2 se ve la rotación, simple o doble, con los nodos acomodándose solos.
 - **Los cuatro recorridos**: inorden, preorden, postorden y por niveles, con la lista que se va armando y la cola visible en el de niveles. Al terminar puedes copiar el orden para pegarlo donde quieras.
