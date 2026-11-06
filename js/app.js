@@ -434,6 +434,8 @@
         }
     }
     document.querySelectorAll('[data-vista]').forEach(b => b.addEventListener('click', () => ponerVista(b.dataset.vista)));
+    const ventanaAtajos = $('atajos');
+    $('ver-atajos').addEventListener('click', () => ventanaAtajos.showModal());
     // atajos, espacio pausa, las flechas mueven los pasos y la n o la diagonal van al numero
     // escape cierra la ficha del nodo aunque estes escribiendo
     document.addEventListener('keydown', ev => {
@@ -441,7 +443,7 @@
             cerrarFicha();
             return;
         }
-        if (ev.target instanceof HTMLInputElement || vista === 'retos')
+        if (ev.target instanceof HTMLInputElement || vista === 'retos' || ventanaAtajos.open)
             return;
         if (ev.key === ' ') {
             ev.preventDefault();
@@ -455,6 +457,10 @@
             ev.preventDefault();
             entrada.focus();
             entrada.select();
+        }
+        else if (ev.key === '?') {
+            ev.preventDefault();
+            ventanaAtajos.showModal();
         }
         else if (ev.key === 'r')
             $('aleatorio').click();
