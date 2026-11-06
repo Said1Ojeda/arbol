@@ -1086,3 +1086,30 @@ body[data-vista="retos"] .selector-modo {
 }
 
 .copiar { margin-top: 10px; }
+
+.atajos {
+  width: min(420px, calc(100% - 32px));
+  margin: auto;
+  padding: 22px;
+  border: 2px solid var(--linea);
+  border-radius: 20px;
+  background: var(--semilla);
+  color: var(--tinta);
+  box-shadow: var(--sombra);
+}
+.atajos::backdrop { background: rgba(15, 31, 26, .45); }
+.atajos h2 { margin: 0 0 12px; }
+.atajos dl { margin: 0 0 18px; }
+.atajos dl div { display: grid; grid-template-columns: 120px 1fr; gap: 10px; padding: 6px 0; border-top: 1px dashed var(--linea); }
+.atajos dd { margin: 0; color: var(--tinta-suave); }
+.atajos kbd {
+  display: inline-block;
+  min-width: 26px;
+  padding: 1px 7px;
+  border: 2px solid var(--linea);
+  border-bottom-width: 3px;
+  border-radius: 8px;
+  font: 600 .85rem "JetBrains Mono", monospace;
+  text-align: center;
+}
+.atajos form { text-align: right; }

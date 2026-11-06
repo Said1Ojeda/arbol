@@ -125,6 +125,7 @@
       <button class="chip" type="button" data-ejemplo="lleno" title="Todos los niveles completos">Lleno</button>
       <button class="chip" type="button" id="vaciar">Vaciar</button>
       <button class="chip" type="button" id="compartir">🔗 Compartir este árbol</button>
+      <button class="chip" type="button" id="ver-atajos" title="Tecla ?">⌨️ Atajos</button>
     </div>
 
     <section class="tarjeta codigo" aria-labelledby="t-codigo">
@@ -154,6 +155,21 @@
     </section>
   </aside>
 </main>
+
+<dialog class="atajos" id="atajos" aria-labelledby="t-atajos">
+  <h2 id="t-atajos">Atajos de teclado</h2>
+  <dl>
+    <div><dt><kbd>Espacio</kbd></dt><dd>Pausar o seguir la animación</dd></div>
+    <div><dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Paso anterior o siguiente</dd></div>
+    <div><dt><kbd>+</kbd> <kbd>-</kbd></dt><dd>Más rápido o más lento</dd></div>
+    <div><dt><kbd>N</kbd> o <kbd>/</kbd></dt><dd>Ir a escribir el número</dd></div>
+    <div><dt><kbd>R</kbd></dt><dd>Árbol aleatorio</dd></div>
+    <div><dt><kbd>V</kbd></dt><dd>Vaciar el árbol</dd></div>
+    <div><dt><kbd>Esc</kbd></dt><dd>Cerrar la ficha o esta ventana</dd></div>
+    <div><dt><kbd>?</kbd></dt><dd>Ver estos atajos</dd></div>
+  </dl>
+  <form method="dialog"><button class="boton brote-btn">Entendido</button></form>
+</dialog>
 
 <script src="js/pseudo.js"></script>
 <script src="js/arbol.js"></script>
