@@ -45,7 +45,13 @@
         m.textContent = p.mensaje;
         m.className = 'mensaje ' + p.tono;
         $('vacio').hidden = p.foto.raiz !== null;
-        $('contador').textContent = pasos.length > 1 ? 'Paso ' + (actual + 1) + ' de ' + pasos.length : '';
+        // cuantas veces se comparo, para ver por que un arbol alto cuesta mas
+        // en los recorridos tambien se marca compara pero ahi no se compara nada
+        const cuenta = ['insertar', 'buscar', 'eliminar'].includes(p.codigo);
+        const comparaciones = !cuenta ? 0 : pasos.filter(x => Object.values(x.marcas).some(m => m === 'compara' || m === 'encontrado')).length;
+        $('contador').textContent = pasos.length > 1
+            ? 'Paso ' + (actual + 1) + ' de ' + pasos.length + (comparaciones ? ', ' + comparaciones + (comparaciones === 1 ? ' comparación' : ' comparaciones') : '')
+            : '';
         btnAnt.disabled = actual === 0;
         btnSig.disabled = actual >= pasos.length - 1;
         pintarDatos(p.foto);
