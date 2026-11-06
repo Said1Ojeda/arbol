@@ -402,7 +402,7 @@
         }
     }
     document.querySelectorAll('[data-vista]').forEach(b => b.addEventListener('click', () => ponerVista(b.dataset.vista)));
-    // atajos, espacio pausa y las flechas mueven los pasos, si no estas escribiendo
+    // atajos, espacio pausa, las flechas mueven los pasos y la n o la diagonal van al numero
     document.addEventListener('keydown', ev => {
         if (ev.target instanceof HTMLInputElement || vista === 'retos')
             return;
@@ -414,6 +414,11 @@
             ir(1);
         else if (ev.key === 'ArrowLeft')
             ir(-1);
+        else if (ev.key === '/' || ev.key === 'n') {
+            ev.preventDefault();
+            entrada.focus();
+            entrada.select();
+        }
     });
     if (!leerEnlace()) {
         arbol.construir(EJEMPLOS.balanceado.valores);
