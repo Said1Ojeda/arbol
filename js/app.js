@@ -240,7 +240,8 @@
     const EJEMPLOS = {
         balanceado: { valores: [50, 30, 70, 20, 40, 60, 80], mensaje: 'Un árbol bien parejo, cada búsqueda toca 3 nodos como mucho.' },
         escalera: { valores: [10, 20, 30, 40, 50, 60], mensaje: 'Si los números entran ordenados el árbol se vuelve una escalera, casi una lista. Para eso existe el AVL.' },
-        zigzag: { valores: [50, 20, 70, 10, 40], mensaje: 'Inserta 30 o 45 en modo AVL. El peso queda en zigzag y vas a ver una rotación doble.' }
+        zigzag: { valores: [50, 20, 70, 10, 40], mensaje: 'Inserta 30 o 45 en modo AVL. El peso queda en zigzag y vas a ver una rotación doble.' },
+        lleno: { valores: [50, 25, 75, 12, 37, 62, 87, 6, 18, 31, 43, 56, 68, 81, 93], mensaje: 'Árbol lleno, 15 nodos en 4 niveles y todas las hojas a la misma altura. Es lo mejor que se puede con 15.' }
     };
     // en avl la escalera sale balanceada, el mensaje tiene que decirlo
     const MENSAJE_AVL = {
