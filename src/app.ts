@@ -128,7 +128,17 @@
     });
     btnAnt.addEventListener('click', () => ir(-1));
     btnSig.addEventListener('click', () => ir(1));
-    velocidad.addEventListener('input', () => tocar(tocando));
+    velocidad.addEventListener('input', () => { tocar(tocando); guardar('arbol-velocidad', velocidad.value); });
+
+    // modo y velocidad se recuerdan para la otra vez, si el navegador no deja no pasa nada
+    function guardar(clave: string, valor: string) {
+        try { localStorage.setItem(clave, valor); } catch (e) { }
+    }
+    function recordado(clave: string): string | null {
+        try { return localStorage.getItem(clave); } catch (e) { return null; }
+    }
+    const velGuardada = recordado('arbol-velocidad');
+    if (velGuardada && !isNaN(Number(velGuardada))) velocidad.value = velGuardada;
 
     // datos del arbol, se sacan de la foto del paso para que cuadren con lo que se ve
 
@@ -374,6 +384,7 @@
     function ponerModo(modo: ModoArbol, avisar = true) {
         document.querySelectorAll<HTMLButtonElement>('[data-modo]').forEach(b => b.setAttribute('aria-checked', String(b.dataset.modo === modo)));
         document.body.dataset.modo = modo;
+        guardar('arbol-modo', modo);
         if (modo === arbol.modo && avisar) return;
         const antes = arbol.resumen().altura;
         arbol.construir(arbol.valores(), modo);
@@ -435,6 +446,7 @@
     });
 
     if (!leerEnlace()) {
+        if (recordado('arbol-modo') === 'avl') ponerModo('avl', false);
         arbol.construir(EJEMPLOS.balanceado.valores);
         cargar([pasoQuieto('Escribe un número y dale a Insertar para ver por dónde baja. Toca un nodo para ver sus datos.')], false);
     }
