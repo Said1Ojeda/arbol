@@ -456,6 +456,10 @@
             entrada.focus();
             entrada.select();
         }
+        else if (ev.key === 'r')
+            $('aleatorio').click();
+        else if (ev.key === 'v')
+            $('vaciar').click();
         else if (ev.key === '+' || ev.key === '-') {
             // mas y menos mueven la velocidad un paso del slider
             const paso = Number(velocidad.step) * (ev.key === '+' ? 1 : -1);
