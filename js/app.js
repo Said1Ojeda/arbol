@@ -403,7 +403,12 @@
     }
     document.querySelectorAll('[data-vista]').forEach(b => b.addEventListener('click', () => ponerVista(b.dataset.vista)));
     // atajos, espacio pausa, las flechas mueven los pasos y la n o la diagonal van al numero
+    // escape cierra la ficha del nodo aunque estes escribiendo
     document.addEventListener('keydown', ev => {
+        if (ev.key === 'Escape' && fichaDe !== null) {
+            cerrarFicha();
+            return;
+        }
         if (ev.target instanceof HTMLInputElement || vista === 'retos')
             return;
         if (ev.key === ' ') {
