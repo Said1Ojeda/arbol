@@ -17,7 +17,7 @@
 - **Pseudocódigo** al lado que ilumina la línea que se está ejecutando en cada paso.
 - **Ficha del nodo**: tocas cualquier nodo y ves su nivel, altura, factor de balance, hijos, tamaño de su subárbol y el camino desde la raíz.
 - **Datos del árbol**: nodos, altura, hojas, mínimo, máximo y si está balanceado, comparando la altura con la mínima posible.
-- **Ejemplos** listos: balanceado, en escalera para ver por qué existe el AVL, y zigzag para ver una rotación doble.
+- **Ejemplos** listos: balanceado, en escalera para ver por qué existe el AVL, zigzag para ver una rotación doble y uno lleno con todos sus niveles completos.
 - **Compartir**: el enlace lleva el árbol armado, al abrirlo sale el mismo.
 
 **Retos** 🎮
