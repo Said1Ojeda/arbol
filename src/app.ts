@@ -88,6 +88,7 @@
             if (i >= antes) li.classList.add('entra');
             return li;
         }));
+        $('copiar-lista').hidden = !(p.lista && p.lista.length);
         const cola = $('cola');
         cola.hidden = !p.cola;
         $('cola-lista').replaceChildren(...(p.cola ?? []).map(v => {
@@ -337,6 +338,17 @@
     };
     botonSonido.addEventListener('click', () => { Sonido.alternar(); pintarSonido(); });
     pintarSonido();
+
+    // copia el orden del recorrido tal cual, sirve para pegarlo en la tarea
+    $('copiar-lista').addEventListener('click', async () => {
+        const texto = (pasos[actual]?.lista ?? []).join(', ');
+        try {
+            await navigator.clipboard.writeText(texto);
+            aviso.textContent = 'Orden copiado: ' + texto;
+        } catch (e) {
+            aviso.textContent = texto;
+        }
+    });
 
     // el enlace lleva los numeros por niveles y el modo, al abrirlo sale el mismo arbol
     $('compartir').addEventListener('click', async () => {

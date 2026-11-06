@@ -13,7 +13,7 @@
 - **Insertar, buscar y eliminar** con animación paso a paso. Cada paso dice qué se comparó y para dónde se fue, y el número va bajando en una pastillita junto al nodo.
 - **Eliminar con sus tres casos**: si es hoja se quita, si tiene un hijo ese hijo sube, y si tiene dos se busca el sucesor y se copia.
 - **Modo AVL** con el factor de balance encima de cada nodo. Cuando un nodo llega a +2 o -2 se ve la rotación, simple o doble, con los nodos acomodándose solos.
-- **Los cuatro recorridos**: inorden, preorden, postorden y por niveles, con la lista que se va armando y la cola visible en el de niveles.
+- **Los cuatro recorridos**: inorden, preorden, postorden y por niveles, con la lista que se va armando y la cola visible en el de niveles. Al terminar puedes copiar el orden para pegarlo donde quieras.
 - **Pseudocódigo** al lado que ilumina la línea que se está ejecutando en cada paso.
 - **Ficha del nodo**: tocas cualquier nodo y ves su nivel, altura, factor de balance, hijos, tamaño de su subárbol y el camino desde la raíz.
 - **Datos del árbol**: nodos, altura, hojas, mínimo, máximo y si está balanceado, comparando la altura con la mínima posible.

@@ -1084,3 +1084,5 @@ body[data-vista="retos"] .selector-modo {
     animation: none !important;
   }
 }
+
+.copiar { margin-top: 10px; }
