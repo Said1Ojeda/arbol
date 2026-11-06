@@ -450,6 +450,8 @@
         else if (ev.key === 'ArrowRight') ir(1);
         else if (ev.key === 'ArrowLeft') ir(-1);
         else if (ev.key === '/' || ev.key === 'n') { ev.preventDefault(); entrada.focus(); entrada.select(); }
+        else if (ev.key === 'r') $('aleatorio').click();
+        else if (ev.key === 'v') $('vaciar').click();
         else if (ev.key === '+' || ev.key === '-') {
             // mas y menos mueven la velocidad un paso del slider
             const paso = Number(velocidad.step) * (ev.key === '+' ? 1 : -1);
